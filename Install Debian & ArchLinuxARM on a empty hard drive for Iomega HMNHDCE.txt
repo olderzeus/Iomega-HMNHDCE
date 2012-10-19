@@ -1,0 +1,63 @@
+﻿Howto: Install Debian & ArchLinuxARM on a empty hard drive for Iomega® Home Media Network Hard Drive, Cloud Edition:
+
+Warning:
+
+By doing anything that follows, you could:
+	Loose all data on you device
+	Void your warranty
+or any combination of the above. So don't proceed unless you know what you're doing and you mean it.
+
+Prerequisites:
+
+You will need
+	A blank, or to-be-blanked SATA HDD.
+	A linux system (or vm, or live cd/usb) in order to use the commands, scripts & files.
+	Your linux system already installed parted and gzip.
+
+Procedure:
+	Attach the SATA HDD to the machine/vm you will use for this process.
+	Power up the machine/vm and normal boot up;
+	Recognize your HDD's divice name, For example, here will be used /dev/sdX or sdX
+	Download boot sectors data file BootSectors.tgz and save to your machine/vm's /tmp directory;
+	Extract BootSectors.tgz to /tmp/boot;
+		command:
+			mkdir /tmp/boot
+			tar -C /tmp/boot -zxf BootSectors.tgz
+	Create new partition table and filesystem on HDD(default rootfs partition size:20GB);
+		command:
+			cd /tmp/boot
+			./mkgptdisk.sh /dev/sdX #[if you want msdos part, command: ./mkdosdisk.sh /dev/sdX]
+	[Option]:Create second partition (user data partition) on HDD and format it;
+		command:
+			parted /dev/sdX mkpart primary 21.5GB -1s
+			mkfs.ext3 /dev/sdX2
+	Write boot sectors data to HDD;
+		command:
+			cd /tmp/boot
+			./flushsd.sh /dev/sdX
+	Download rootfs file(Debian.tgz or ArchLinuxARM.tgz) and save to your machine/vm's /tmp directory;
+	Mount HDD's first partition and extract rootfs to it;
+		command:
+			mkdir /tmp/mydisk
+			mount /dev/sdX1 /tmp/mydisk
+			cd /tmp
+			tar -C /tmp/mydisk -zvxf Debian.tgz #[or archlinux: tar -C /tmp/mydisk -zvxf ArchLinuxARM.tgz]
+			sync
+			umount /dev/sdX1
+	Shut down the machine/vm and remove HDD;
+	Attach the drive to your Iomega HMNHDCE;
+	Apply power to the device and power up, Your device will normal boot to the Debian [or ArchLinuxARM] system.
+
+Note:
+	This Debian [or ArchLinuxARM] system already installed openssh and start the service at bootup, username and password both are root;
+	The locale and language setting of this Debian [or ArchLinuxARM] system is chinese, you need reconfigure;
+	In this Debian system, apt-get package server in /etc/apt/sources.list used Debian mirror server in china, you can read http://www.debian.org/mirror/list and reconfigure;
+	In this Debian [or ArchLinuxARM] systen, HMNHDCE's powerbutton is redefined as:
+		Press once: After 8 seconds, system will restart network service;
+		Press twice (In 8 seconds, after first press): After 5 seconds, system will reboot;
+		Press triple (In 5 seconds, after second press): System will shut down immediately;
+		This redefined depend on package screen, it already include in this system;
+	You may need regenerate ssh service's key:
+		command:
+			ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+			ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key

@@ -82,3 +82,17 @@ Procedure:
 			sync
 			reboot
 	Ok, Your device will normal boot to the Debian [or ArchLinuxARM] system and use inner HDD's first partition as rootfs;
+
+Note:
+	This Debian [or ArchLinuxARM] system already installed openssh and start the service at bootup, username and password both are root;
+	The locale and language setting of this Debian [or ArchLinuxARM] system is chinese, you need reconfigure;
+	In this Debian system, apt-get package server in /etc/apt/sources.list used Debian mirror server in china, you can read http://www.debian.org/mirror/list and reconfigure;
+	In this Debian [or ArchLinuxARM] systen, HMNHDCE's powerbutton is redefined as:
+		Press once: After 8 seconds, system will restart network service;
+		Press twice (In 8 seconds, after first press): After 5 seconds, system will reboot;
+		Press triple (In 5 seconds, after second press): System will shut down immediately;
+		This redefined depend on package screen, it already include in this system;
+	You may need regenerate ssh service's key:
+		command:
+			ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+			ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
