@@ -1,4 +1,4 @@
-﻿Howto: Install Debian & ArchLinuxARM on a empty hard drive for Iomega® Home Media Network Hard Drive, Cloud Edition:
+Howto: Install Debian & ArchLinuxARM on a empty hard drive for Iomega® Home Media Network Hard Drive, Cloud Edition:
 
 Warning:
 

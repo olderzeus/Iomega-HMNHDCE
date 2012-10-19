@@ -1,0 +1,13 @@
+Howto: Install OpenMediaVault on Debian:
+
+Command:
+
+	echo "deb http://teration.net/repo squeeze main" >> /etc/apt/sources.list
+	echo "deb http://packages.openmediavault.org/public omnius main" >> /etc/apt/sources.list
+	cd /tmp
+	wget http://teration.net/repo/signkey.gpg.asc
+	apt-key add signkey.gpg.asc
+	wget http://packages.openmediavault.org/public/archive.key
+	apt-key add archive.key
+	apt-get update
+	apt-get install openmediavault
